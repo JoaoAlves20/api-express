@@ -1,0 +1,19 @@
+{
+  "name": "api-express",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/JoaoAlves20/api-express.git",
+  "author": "JoaoAlves20 <jvsimoesalves@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "npx nodemon --env-file=.env src/server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "helmet": "^8.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
