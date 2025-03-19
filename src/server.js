@@ -9,7 +9,7 @@ const server = express();
 server.use(express.json());
 server.use(helmet());
 
-server.use(router)
+server.use('/users', router);
 
 const { port } = config;
 server.listen(port, () => console.log(`Server runner in http://localhost:${port}`));

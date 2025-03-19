@@ -7,13 +7,16 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "npx nodemon --env-file=.env src/server.js"
+    "dev:start": "npx nodemon --env-file=.env src/server.js",
+    "dev:test": "npx mocha tests/*.test.js"
   },
   "dependencies": {
     "express": "^4.21.2",
     "helmet": "^8.0.0"
   },
   "devDependencies": {
+    "chai": "^5.2.0",
+    "mocha": "^11.1.0",
     "nodemon": "^3.1.9"
   }
 }
