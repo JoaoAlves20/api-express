@@ -1,4 +1,4 @@
-import users from "../mocks/users.js";
+import { users } from "../mocks/users.js";
 
 class UserService {
     findAll() {
@@ -13,11 +13,19 @@ class UserService {
         })
     }
 
-    create({ username, password, role }) {
+    findByEmail(email) {
+        return new Promise((resolve) => {
+            const result = users.find(item => item.email === email);
+
+            return resolve(result);
+        })
+    }
+
+    create({ username, email, password, role }) {
         return new Promise((resolve) => {
             const newUser = {
                 id: users.length + 1,
-                username, password, role
+                username, email, password, role
             }
             users.push(newUser);
             return resolve(newUser);

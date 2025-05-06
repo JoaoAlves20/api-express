@@ -1,14 +1,16 @@
-export default [
+export const users = [
     {
         id: 1,
         username: "João",
-        password: "1234",
+        email: 'joao@gmail.com',
+        password: "joao1807",
         role: "admin"
     },
     {
         id: 2,
-        username: "User",
-        password: "5678",
+        username: "teste",
+        email: 'teste@gmail.com',
+        password: "teste1234",
         role: "user"
     }
 ]
