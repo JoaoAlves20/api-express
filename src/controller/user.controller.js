@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 
 import UserService from "../service/user.service.js";
 import config from '../config/serverConfig.js';
+import { sucess, failure } from '../helpers/standardAnswer.js';
 
 class UserController {
     async getAll(_, response) {
@@ -9,14 +10,14 @@ class UserController {
             const result = await UserService.findAll();
 
             if (!result) {
-                response.status(200).json({ error: "Users not created" });
+                failure(response, 'Users not created', 404, 'USERS_NOT_FOUND');
                 return;
             }
 
-            response.status(200).json(result);
+            sucess(response, result, 200, 'Success to show users');
         } catch (err) {
             console.error('Error:', err.message);
-            response.status(500).json({ error: 'Internal server error' });
+            failure(response, 'Internal server error', 500, 'INTERNAL_ERROR');
         }
     }
 
@@ -24,22 +25,17 @@ class UserController {
         try {
             const { id } = request.params;
 
-            if (!id) {
-                response.status(400).json({ error: "Id is invalid" });
-                return;
-            }
-
             const result = await UserService.findById(id);
 
             if (!result) {
-                response.status(404).json({ error: "User not found" });
+                failure(response, 'User not found', 404, 'USER_NOT_FOUND');
                 return;
             }
 
-            response.status(200).json(result);
+            sucess(response, result, 200, 'Success to show the user');
         } catch (err) {
             console.error('Error:', err.message);
-            response.status(500).json({ error: 'Internal server error' });
+            failure(response, 'Internal server error', 500, 'INTERNAL_ERROR');
         }
     }
 
@@ -48,21 +44,21 @@ class UserController {
             const body = request.body;
 
             if (!body) {
-                response.status(400).json({ error: "Items of body is required" });
+                failure(response, "Items of body is required", 400, "ITEMS_IS_REQUIRED");
                 return;
             }
 
             const newUser = await UserService.create({ ...body });
 
             if (!newUser) {
-                response.status(400).json({ error: "user not created" });
+                failure(response, "User not created", 400, "NOT_CREATED");
                 return;
             }
             
-            response.status(201).json(newUser);
+            sucess(response, newUser, 201, "Created user");
         } catch (err) {
             console.error('Error:', err.message);
-            response.status(500).json({ error: 'Internal server error' });
+            failure(response, 'Internal server error', 500, 'INTERNAL_ERROR');
         }
     }
 
@@ -74,7 +70,7 @@ class UserController {
             const userExists = await UserService.findById(id);
 
             if (!userExists) {
-                response.status(404).json({ error: "User not found" });
+                failure(response, 'User not found', 404, 'USER_NOT_FOUND');
                 return;
             }
 
@@ -82,14 +78,14 @@ class UserController {
             const userUpdated = await UserService.update(id, { ...userExists, ...body });
 
             if (!userUpdated) {
-                response.status(400).json({ error: "user not updated" });
+                failure(response, "User not updated", 400, "NOT_UPDATED");
                 return;
             }
             
-            response.status(200).json(userUpdated);
+            sucess(response, userUpdated, 200, "Updated user");
         } catch (err) {
             console.error('Error:', err.message);
-            response.status(500).json({ error: 'Internal server error' });
+            failure(response, 'Internal server error', 500, 'INTERNAL_ERROR');
         }
     }
 
@@ -99,15 +95,15 @@ class UserController {
             const userExists = await UserService.findById(id);
 
             if (!userExists) {
-                response.status(404).json({ error: "User not found" });
+                failure(response, 'User not found', 404, 'USER_NOT_FOUND');
                 return;
             }
 
             await UserService.delete(id);
-            response.status(200).json({ message: "User deleted" });
+            sucess(response, userExists, 200, "Deleted user");
         } catch (err) {
             console.error('Error:', err.message);
-            response.status(500).json({ error: 'Internal server error' });
+            failure(response, 'Internal server error', 500, 'INTERNAL_ERROR');
         }
     }
 
@@ -118,21 +114,20 @@ class UserController {
             const emailExists = await UserService.findByEmail(email);
 
             if (!emailExists) {
-                response.status(404).json({ error: 'Email not found' });
+                failure(response, 'Email not found', 404, 'EMAIL_NOT_FOUND');
                 return;
             }
 
             if (emailExists.password !== password) {
-                response.status(400).json({ error: 'Password is incorrect' });
+                failure(response, 'Password is incorrect', 400, 'PASSWORD_INCORRECT');
                 return;
             }
 
             const token = jwt.sign({ email }, config.secret_key, { expiresIn: '1h' });
-            response.status(200).json({ token });
+            sucess(response, { token }, 200, "Token to login");
         } catch (err) {
             console.error('Error:', err.message);
-
-            response.status(500).json({ error: 'Internal server error' });
+            failure(response, 'Internal server error', 500, 'INTERNAL_ERROR');
         }
     }
 }
