@@ -6,14 +6,14 @@ import config from '../config/serverConfig.js';
 class UserController {
     async getAll(_, response) {
         try {
-            const users = await UserService.findAll();
+            const result = await UserService.findAll();
 
-            if (!users) {
+            if (!result) {
                 response.status(200).json({ error: "Users not created" });
                 return;
             }
 
-            response.status(200).json(users);
+            response.status(200).json(result);
         } catch (err) {
             console.error('Error:', err.message);
             response.status(500).json({ error: 'Internal server error' });
@@ -29,30 +29,30 @@ class UserController {
                 return;
             }
 
-            const user = await UserService.findById(id);
+            const result = await UserService.findById(id);
 
-            if (!user) {
+            if (!result) {
                 response.status(404).json({ error: "User not found" });
                 return;
             }
 
-            response.status(200).json(user);
+            response.status(200).json(result);
         } catch (err) {
             console.error('Error:', err.message);
             response.status(500).json({ error: 'Internal server error' });
         }
     }
 
-    async createUser(request, response) {
+    async registerUser(request, response) {
         try {
-            const { username, email, password, role } = request.body;
+            const body = request.body;
 
-            if (!username && !password && !role) {
-                response.status(400).json({ error: "username, password and role is requireds" });
+            if (!body) {
+                response.status(400).json({ error: "Items of body is required" });
                 return;
             }
 
-            const newUser = await UserService.create({ username, email, password, role });
+            const newUser = await UserService.create({ ...body });
 
             if (!newUser) {
                 response.status(400).json({ error: "user not created" });
@@ -68,7 +68,7 @@ class UserController {
 
     async updateUser(request, response) {
         try {
-            const { username, password, role } = request.body;
+            const body = request.body;
             const { id } = request.params;
 
             const userExists = await UserService.findById(id);
@@ -78,14 +78,15 @@ class UserController {
                 return;
             }
 
-            const userUpdate = await UserService.update(id, { username, password, role });
+            delete userExists.id;
+            const userUpdated = await UserService.update(id, { ...userExists, ...body });
 
-            if (!userUpdate) {
+            if (!userUpdated) {
                 response.status(400).json({ error: "user not updated" });
                 return;
             }
             
-            response.status(200).json(userUpdate);
+            response.status(200).json(userUpdated);
         } catch (err) {
             console.error('Error:', err.message);
             response.status(500).json({ error: 'Internal server error' });
