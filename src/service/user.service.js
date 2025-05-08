@@ -44,7 +44,7 @@ class UserService {
 
     delete(id) {
         return new Promise((resolve) => {
-            users.filter(user => user.id !== id);
+            users.filter(user => user.id !== +id);
 
             return resolve(users);
         })

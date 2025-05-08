@@ -2,9 +2,8 @@ import { Router } from "express";
 
 import UserController from "../controller/user.controller.js";
 import { verifyLogin } from "../middleware/verifyLogin.js";
-import {
-    middleValidateBody, schemaRegister, schemaLogin, schemaUpdate
-} from "../middleware/validateData.js";
+import { middleValidateBody } from "../middleware/validateData.js";
+import { schemaLogin, schemaRegister, schemaUpdate } from '../schema/index.js'
 
 export const router = Router();
 

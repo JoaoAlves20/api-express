@@ -74,8 +74,7 @@ class UserController {
                 return;
             }
 
-            delete userExists.id;
-            const userUpdated = await UserService.update(id, { ...userExists, ...body });
+            const userUpdated = await UserService.update(id, { ...body });
 
             if (!userUpdated) {
                 failure(response, "User not updated", 400, "NOT_UPDATED");
@@ -111,14 +110,14 @@ class UserController {
         try {
             const { email, password } = request.body;
 
-            const emailExists = await UserService.findByEmail(email);
+            const findUser = await UserService.findByEmail(email);
 
-            if (!emailExists) {
+            if (!findUser) {
                 failure(response, 'Email not found', 404, 'EMAIL_NOT_FOUND');
                 return;
             }
 
-            if (emailExists.password !== password) {
+            if (findUser.password !== password) {
                 failure(response, 'Password is incorrect', 400, 'PASSWORD_INCORRECT');
                 return;
             }

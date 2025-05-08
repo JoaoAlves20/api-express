@@ -1,34 +1,34 @@
 import jwt from 'jsonwebtoken';
 
 import config from '../config/serverConfig.js';
+import { failure } from '../helpers/standardAnswer.js';
 
 export function verifyLogin(request, response, next) {
     const { authorization } = request.headers;
 
     if (!authorization) {
-        response.status(401).json({ error: 'Access denied' });
+        failure(response, { error: 'Access denied' }, 401, "ACCESS_DENIED");
         return;
     }
 
     const [prefix, token] = authorization.split(' ');
 
     if (prefix !== 'Bearer') {
-        response.status(401).json({ error: 'Prefix is ​​incorrect' });
+        failure(response, { error: 'Prefix is ​​incorrect' }, 401, 'PREFIX_INCORRECT');
         return;
     }
 
     if (!token) {
-        response.status(401).json({ error: 'Token was not provided' });
+        failure(response, { error: 'Token was not provided' }, 401, 'TOKEN_IS_REQUIRED');
         return;
     }
 
     try {
-        const decoded = jwt.verify(token, config.secret_key.toString());
+        const decoded = jwt.verify(token, config.secret_key);
         request.user = decoded;
         next();
     } catch (err) {
         console.error('Error:', err.message);
-
-        response.status(401).json({ error: 'Incorrect or expired token' });
+        failure(response, { error: 'Incorrect or expired token' }, 401, 'WRONG_TOKEN');
     }
 }
