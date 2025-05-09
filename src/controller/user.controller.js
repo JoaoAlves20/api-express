@@ -4,6 +4,8 @@ import UserService from "../service/user.service.js";
 import config from '../config/serverConfig.js';
 import { sucess, failure } from '../helpers/standardAnswer.js';
 
+const { secret_key } = config;
+
 class UserController {
     async getAll(_, response) {
         try {
@@ -39,7 +41,7 @@ class UserController {
         }
     }
 
-    async registerUser(request, response) {
+    async register(request, response) {
         try {
             const body = request.body;
 
@@ -62,7 +64,7 @@ class UserController {
         }
     }
 
-    async updateUser(request, response) {
+    async update(request, response) {
         try {
             const body = request.body;
             const { id } = request.params;
@@ -88,7 +90,7 @@ class UserController {
         }
     }
 
-    async deleteUser(request, response) {
+    async delete(request, response) {
         try {
             const { id } = request.params;
             const userExists = await UserService.findById(id);
@@ -122,7 +124,7 @@ class UserController {
                 return;
             }
 
-            const token = jwt.sign({ email }, config.secret_key, { expiresIn: '1h' });
+            const token = jwt.sign({ email }, secret_key, { expiresIn: '1h' });
             sucess(response, { token }, 200, "Token to login");
         } catch (err) {
             console.error('Error:', err.message);

@@ -3,6 +3,8 @@ import jwt from 'jsonwebtoken';
 import config from '../config/serverConfig.js';
 import { failure } from '../helpers/standardAnswer.js';
 
+const { secret_key } = config;
+
 export function verifyLogin(request, response, next) {
     const { authorization } = request.headers;
 
@@ -24,7 +26,7 @@ export function verifyLogin(request, response, next) {
     }
 
     try {
-        const decoded = jwt.verify(token, config.secret_key);
+        const decoded = jwt.verify(token, secret_key);
         request.user = decoded;
         next();
     } catch (err) {
