@@ -12,9 +12,6 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(helmet());
 
-server.get('/hello', (request, response) => {
-    response.status(200).json({ message: "Hello World" });
-})
 server.use('/users', router);
 
 export default server;

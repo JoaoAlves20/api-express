@@ -28,6 +28,12 @@ describe("Testing the services", function () {
         assert.deepEqual(result, users[0]);
     })
 
+    it('Testing the findbyemail()', async () => {
+        const result = await UserService.findByEmail(USER_UPDATE.email);
+        delete result.id;
+        assert.deepEqual(result, USER_UPDATE);
+    })
+
     it("Testing the create()", async () => {
         const result = await UserService.create(USER_CREATE);
         delete result.id;
