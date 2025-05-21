@@ -1,8 +1,11 @@
 import { users } from "../mocks/users.js";
 
+import User from "../schema/user.schema.js";
+
 class UserService {
-    findAll() {
-        return new Promise((resolve) => resolve(users));
+    async findAll() {
+        const users = await User.find();
+        return users;
     }
 
     findById(idUser) {

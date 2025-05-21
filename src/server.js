@@ -4,6 +4,7 @@ import path from "path";
 
 import config from "./config/serverConfig.js";
 import { router } from "./routes/router.js";
+import { connectDB } from "./config/database.js";
 
 const server = express();
 const { port } = config;
@@ -11,6 +12,8 @@ const { port } = config;
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(helmet());
+
+connectDB();
 
 server.use('/users', router);
 

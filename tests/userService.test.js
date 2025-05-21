@@ -2,6 +2,7 @@ import assert from 'assert';
 
 import UserService from "../src/service/user.service.js";
 import { users } from "../src/mocks/users.js";
+import { connectDB } from '../src/config/database.js';
 
 const USER_CREATE = {
     username: "Admin",
@@ -18,6 +19,8 @@ const USER_UPDATE = {
 }
 
 describe("Testing the services", function () {
+    this.beforeAll(() => connectDB());
+    
     it("Testing the findall()", async () => {
         const result = await UserService.findAll();
         assert.deepEqual(result, users);

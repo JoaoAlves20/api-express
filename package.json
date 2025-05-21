@@ -8,6 +8,7 @@
   "type": "module",
   "scripts": {
     "dev": "npx nodemon src/server.js",
+    "start": "docker-compose up -d --build",
     "test:services": "npx mocha tests/userService.test.js",
     "test:endpoint": "npx mocha tests/endpoints.test.js"
   },
@@ -16,11 +17,10 @@
     "express": "^4.21.2",
     "helmet": "^8.0.0",
     "joi": "^17.13.3",
-    "jsonwebtoken": "^9.0.2"
-  },
-  "devDependencies": {
-    "mocha": "^11.1.0",
-    "nodemon": "^3.1.9",
-    "supertest": "^7.1.0"
+    "jsonwebtoken": "^9.0.2",
+    "mocha": "^11.4.0",
+    "mongoose": "^8.15.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.1"
   }
 }
