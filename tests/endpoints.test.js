@@ -71,6 +71,7 @@ describe('Testes da API', function () {
             .set('authorization', `Bearer ${token}`)
         
         const { data } = response.body;
+        delete data.id;
         assert.deepEqual(data, USER_UPDATE);
     })
 

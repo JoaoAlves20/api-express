@@ -9,19 +9,19 @@ export function verifyLogin(request, response, next) {
     const { authorization } = request.headers;
 
     if (!authorization) {
-        failure(response, { error: 'Access denied' }, 401, "ACCESS_DENIED");
+        failure(response, 'Access denied', 401, "ACCESS_DENIED");
         return;
     }
 
     const [prefix, token] = authorization.split(' ');
 
     if (prefix !== 'Bearer') {
-        failure(response, { error: 'Prefix is ​​incorrect' }, 401, 'PREFIX_INCORRECT');
+        failure(response, 'Prefix is ​​incorrect', 401, 'PREFIX_INCORRECT');
         return;
     }
 
     if (!token) {
-        failure(response, { error: 'Token was not provided' }, 401, 'TOKEN_IS_REQUIRED');
+        failure(response, 'Token was not provided', 401, 'TOKEN_IS_REQUIRED');
         return;
     }
 
@@ -31,6 +31,6 @@ export function verifyLogin(request, response, next) {
         next();
     } catch (err) {
         console.error('Error:', err.message);
-        failure(response, { error: 'Incorrect or expired token' }, 401, 'WRONG_TOKEN');
+        failure(response, 'Incorrect or expired token', 401, 'WRONG_TOKEN');
     }
 }
